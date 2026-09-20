@@ -1,0 +1,21 @@
+{
+  "name": "branch-chat",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "dev": "node --watch server/index.js",
+    "build": "node -e \"console.log('原生网页无需构建')\"",
+    "start": "node server/index.js",
+    "migrate-key": "node scripts/migrate-key.js"
+  },
+  "dependencies": {
+    "dompurify": "^3.4.12",
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0",
+    "marked": "^18.0.6"
+  }
+}
