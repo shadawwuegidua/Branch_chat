@@ -8,11 +8,17 @@ async function connect() {
   retry.hidden = true;
   statusText.textContent = '正在连接聊天服务器…';
   try {
-    const response = await fetch("https://raw.githubusercontent.com/shadawwuegidua/Branch_chat/gh-pages/docs/endpoint.json" + '?t=' + Date.now(), { cache: 'no-store', signal: AbortSignal.timeout(12000) });
+    let response;
+    try {
+      response = await fetch("https://raw.githubusercontent.com/shadawwuegidua/Branch_chat/gh-pages/docs/endpoint.json" + '?t=' + Date.now(), { cache: 'no-store', signal: AbortSignal.timeout(12000) });
+      if (!response.ok) throw new Error();
+    } catch {
+      response = await fetch('./endpoint.json?t=' + Date.now(), { cache: 'no-store', signal: AbortSignal.timeout(12000) });
+    }
     if (!response.ok) throw new Error();
     const data = await response.json();
     const target = new URL(data.url);
-    if (target.protocol !== 'https:' || !['.lhr.life', '.localhost.run'].some((suffix) => target.hostname.endsWith(suffix)) || ['admin.localhost.run', 'www.localhost.run', 'docs.localhost.run'].includes(target.hostname) || target.username || target.password || target.port || target.pathname !== '/' || target.search || target.hash) throw new Error();
+    if (target.protocol !== 'https:' || !['.lhr.life', '.localhost.run', '.run.pinggy-free.link', '.a.free.pinggy.link'].some((suffix) => target.hostname.endsWith(suffix)) || ['admin.localhost.run', 'www.localhost.run', 'docs.localhost.run'].includes(target.hostname) || target.username || target.password || target.port || target.pathname !== '/' || target.search || target.hash) throw new Error();
     location.replace(target.href);
   } catch {
     statusText.textContent = '暂时无法连接。请确认聊天服务器已启动，然后重试。';
