@@ -1,0 +1,24 @@
+<!doctype html><html lang="zh-CN"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><title>枝语 · Branch Chat</title>
+<style>body{margin:0;min-height:100dvh;display:grid;place-items:center;background:#080808;color:#eee;font:16px system-ui,sans-serif;padding:24px;box-sizing:border-box}main{width:min(100%,360px)}h1{font-size:28px}p{color:#aaa;line-height:1.7}button{font:inherit;border:0;border-radius:10px;padding:12px 20px;cursor:pointer}button[hidden]{display:none}</style>
+<main><h1>枝语</h1><p id="status" role="status">正在连接聊天服务器…</p><button id="retry" hidden>重新连接</button><noscript><p>请启用 JavaScript 以连接服务器。</p></noscript></main>
+<script>
+const statusText = document.getElementById('status');
+const retry = document.getElementById('retry');
+async function connect() {
+  retry.hidden = true;
+  statusText.textContent = '正在连接聊天服务器…';
+  try {
+    const response = await fetch("https://raw.githubusercontent.com/shadawwuegidua/Branch_chat/gh-pages/docs/endpoint.json" + '?t=' + Date.now(), { cache: 'no-store', signal: AbortSignal.timeout(12000) });
+    if (!response.ok) throw new Error();
+    const data = await response.json();
+    const target = new URL(data.url);
+    if (target.protocol !== 'https:' || !['.lhr.life', '.localhost.run'].some((suffix) => target.hostname.endsWith(suffix)) || ['admin.localhost.run', 'www.localhost.run', 'docs.localhost.run'].includes(target.hostname) || target.username || target.password || target.port || target.pathname !== '/' || target.search || target.hash) throw new Error();
+    location.replace(target.href);
+  } catch {
+    statusText.textContent = '暂时无法连接。请确认聊天服务器已启动，然后重试。';
+    retry.hidden = false;
+  }
+}
+retry.addEventListener('click', connect);
+connect();
+</script></html>
